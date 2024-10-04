@@ -199,6 +199,11 @@ NSString *const inputFieldTestString = @"Testing";
     return [self _predicateSearchWithRequiresMatch:YES mustBeTappable:NO].view;
 }
 
+- (UIView *)waitForViewInView:(UIView *)inView;
+{
+    return [self _predicateSearchWithRequiresMatch:YES mustBeTappable:NO fromView:inView].view;
+}
+
 - (void)waitForAbsenceOfView;
 {
     [self runBlock:^KIFTestStepResult(NSError **error) {
@@ -656,8 +661,12 @@ NSString *const inputFieldTestString = @"Testing";
     }
     return nil;
 }
-
 - (KIFUIObject *)_predicateSearchWithRequiresMatch:(BOOL)requiresMatch mustBeTappable:(BOOL)tappable;
+{
+    return [self _predicateSearchWithRequiresMatch:requiresMatch mustBeTappable:tappable fromView:nil];
+}
+
+- (KIFUIObject *)_predicateSearchWithRequiresMatch:(BOOL)requiresMatch mustBeTappable:(BOOL)tappable fromView:(UIView *)view;
 {
     __block UIView *foundView = nil;
     __block UIAccessibilityElement *foundElement = nil;

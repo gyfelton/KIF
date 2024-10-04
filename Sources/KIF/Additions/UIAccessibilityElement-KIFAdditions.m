@@ -93,9 +93,22 @@ MAKE_CATEGORIES_LOADABLE(UIAccessibilityElement_KIFAdditions)
 
 + (BOOL)accessibilityElement:(out UIAccessibilityElement **)foundElement view:(out UIView **)foundView withElementMatchingPredicate:(NSPredicate *)predicate tappable:(BOOL)mustBeTappable error:(out NSError **)error disableScroll:(BOOL)scrollDisabled;
 {
-    UIAccessibilityElement *element = [[UIApplication sharedApplication] accessibilityElementMatchingBlock:^BOOL(UIAccessibilityElement *element) {
-        return [predicate evaluateWithObject:element];
-    } disableScroll: scrollDisabled];
+    return [self accessibilityElement:foundElement view:foundView withElementMatchingPredicate:predicate fromView:nil tappable:mustBeTappable error:error disableScroll:scrollDisabled];
+}
+
++ (BOOL)accessibilityElement:(out UIAccessibilityElement **)foundElement view:(out UIView **)foundView fromView:(UIView *)fromView withElementMatchingPredicate:(NSPredicate *)predicate tappable:(BOOL)mustBeTappable error:(out NSError **)error disableScroll:(BOOL)scrollDisabled;
+{
+    UIAccessibilityElement *element = nil;
+    if (fromView) {
+        element = [fromView accessibilityElementMatchingBlock:^BOOL(UIAccessibilityElement *element) {
+            return [predicate evaluateWithObject:element];
+        } disableScroll: scrollDisabled];
+    } else {
+        element = [[UIApplication sharedApplication] accessibilityElementMatchingBlock:^BOOL(UIAccessibilityElement *element) {
+            return [predicate evaluateWithObject:element];
+        } disableScroll: scrollDisabled];
+        
+    }
 
     if (!element) {
         if (error) {
@@ -116,10 +129,10 @@ MAKE_CATEGORIES_LOADABLE(UIAccessibilityElement_KIFAdditions)
 
 + (BOOL)accessibilityElement:(out UIAccessibilityElement *__autoreleasing *)foundElement view:(out UIView *__autoreleasing *)foundView withElementMatchingPredicate:(NSPredicate *)predicate fromRootView:(UIView *)fromView tappable:(BOOL)mustBeTappable error:(out NSError *__autoreleasing *)error
 {
-    return [self accessibilityElement:foundElement view:foundView withElementMatchingPredicate:predicate fromRootView:fromView tappable:mustBeTappable error:error disableScroll:NO];
+    return [self accessibilityElement:foundElement view:foundView withElementMatchingPredicate:predicate fromView:fromView tappable:mustBeTappable error:error disableScroll:NO];
 }
 
-+ (BOOL)accessibilityElement:(out UIAccessibilityElement *__autoreleasing *)foundElement view:(out UIView *__autoreleasing *)foundView withElementMatchingPredicate:(NSPredicate *)predicate fromRootView:(UIView *)fromView tappable:(BOOL)mustBeTappable error:(out NSError *__autoreleasing *)error disableScroll:(BOOL)scrollDisabled
++ (BOOL)accessibilityElement:(out UIAccessibilityElement *__autoreleasing *)foundElement view:(out UIView *__autoreleasing *)foundView withElementMatchingPredicate:(NSPredicate *)predicate fromView:(UIView *)fromView tappable:(BOOL)mustBeTappable error:(out NSError *__autoreleasing *)error disableScroll:(BOOL)scrollDisabled
 {
     UIAccessibilityElement *element = [fromView accessibilityElementMatchingBlock:^BOOL(UIAccessibilityElement *element) {
         return [predicate evaluateWithObject:element];

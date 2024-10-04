@@ -103,6 +103,10 @@
  */
 + (BOOL)accessibilityElement:(out UIAccessibilityElement **)foundElement view:(out UIView **)foundView withElementMatchingPredicate:(NSPredicate *)predicate tappable:(BOOL)mustBeTappable error:(out NSError **)error disableScroll:(BOOL)scrollDisabled;
 
++ (BOOL)accessibilityElement:(out UIAccessibilityElement **)foundElement view:(out UIView **)foundView fromView:(UIView *)fromView withElementMatchingPredicate:(NSPredicate *)predicate tappable:(BOOL)mustBeTappable error:(out NSError **)error disableScroll:(BOOL)scrollDisabled;
+
++ (BOOL)accessibilityElement:(out UIAccessibilityElement *__autoreleasing *)foundElement view:(out UIView *__autoreleasing *)foundView withElementMatchingPredicate:(NSPredicate *)predicate fromView:(UIView *)fromView tappable:(BOOL)mustBeTappable error:(out NSError *__autoreleasing *)error disableScroll:(BOOL)scrollDisabled;
+
 /*!
  @abstract Finds and attempts to make visible a view for a given accessibility element.
  @discussion If the element is found, off screen, and is inside a scroll view, this method will attempt to programmatically scroll the view onto the screen before performing any logic as to if the view is tappable.
